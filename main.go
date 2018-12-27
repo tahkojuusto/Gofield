@@ -10,18 +10,18 @@ func main() {
 		log.Fatalln("Usage: ./gofield <config-file-path>")
 	}
 
-	rVecs, Qs := ReadConfigFromFile(os.Args[1])
-	log.Println("### INPUTS ###")
+	rVecs, Qs, minVec, maxVec, N := ReadConfigFromFile(os.Args[1])
 	for i, Q := range Qs {
 		log.Printf("r(Q%d) = %s", i+1, Q.rVec)
 	}
 
-	log.Println("### OUTPUTS ###")
+	EtotFn := GetEtotFn(Qs)
 	for _, rVec := range rVecs {
-		EtotFn := GetEtotFn(Qs)
 		Etot := EtotFn(rVec)
 
 		log.Printf("E(%s) = %s", rVec, Etot)
-		log.Printf("|E| = %v", PrettifyResult(Magnitude(Etot)))
+		log.Printf("|E(%s)| = %v", rVec, PrettifyResult(Magnitude(Etot)))
 	}
+
+	Draw(Qs, EtotFn, minVec, maxVec, N)
 }
